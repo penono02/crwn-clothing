@@ -11,5 +11,5 @@ export const CollectionItem = ( {id, name, price, imageUrl})=>(
     <span className="price">{price} </span>
 </div>
 </div>
-
 );
+
