@@ -1,12 +1,16 @@
 import React from 'react';
 import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux"
+import { createStructuredSelector } from "reselect";
+
 import { HomePage } from "./pages/HomePage/homepage.component";
-import ShopPage from "../src/pages/shop/shop.component";
+import ShopPage from "./pages/shop/shop.component";
+import CheckoutPage from "./pages/checkout/checkout.component";
 import  Header  from "./components/header/header.component";
 import { SignInSignOut } from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import { auth, createUserProfileDocument  } from "./firebase/firebase.utils"
 import { setCurrentUser } from "./redux/user/user.actions";
+import { selectCurrentUser } from "./redux/user/user.selectors"; 
 
 import './App.css';
 
@@ -71,7 +75,8 @@ componentWillUnmount(){
         <Header />
         <Switch>
           <Route exact path='/' component={HomePage} />
-          <Route path='/shop' component={ShopPage} />
+          <Route path='/shop' component={ShopPage} />  {/* reason why we don't have exact for shop is because we may have /shop/men /shop/shoes*/}
+          <Route exact path='/checkout' component={CheckoutPage} />
           <Route  path='/signin' render={ ()=>this.props.currenttUser ? (<Redirect to="/" />) : (<SignInSignOut />) } />
            {/* switch tells the router to move on when it finds it first match */}
            {/*Render allows you to jsx like it does above - can't dynamically return jsx with component props - 
@@ -86,8 +91,8 @@ componentWillUnmount(){
 }
 
 
-const mapStateToProps = ({ user })=>({  //we destructure off our user reducer - always destructure object when it makes sense to do so
-  currenttUser: user.currenttUser
+const mapStateToProps = createStructuredSelector({  
+  currenttUser: selectCurrentUser
 });
 
 const mapDispatchToProps = dispatch=>({  // dispatch is a function that dispatch actions to reducer
