@@ -16,3 +16,26 @@ export const addItemToCart =(cartItems,     cartItemToAdd)=>{
  return [...cartItems , {...cartItemToAdd, quantity: 1}];
 
 }
+
+
+export const removeItemFromCart =(cartItems, cartItemToRemove)=>{
+
+    const existingCartItem = cartItems.find(
+        cartItem=> cartItem.id === cartItemToRemove.id
+        );
+
+
+    if (existingCartItem.quantity === 1){  //if it's only 1 item left then, filter it out
+        return cartItems.filter(cartItem=>cartItem.id !== cartItemToRemove.id);
+    }
+
+
+    return cartItems.map(cartItem=>     //again another case of map() to return new object or modified object
+        cartItem.id === cartItemToRemove.id  //if it's the same id then return a new object with existing cartItem keys, add a quantity to it and return a new array otherwise return exact same cartItem object
+        ? {...cartItem, quantity: cartItem.quantity - 1} 
+        : cartItem
+        );
+
+
+
+}
